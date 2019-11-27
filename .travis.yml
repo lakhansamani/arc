@@ -10,6 +10,9 @@ branches:
 
 install: true
 
+env:
+  - GO111MODULE=on
+
 jobs:
   include:
     - name: linux
