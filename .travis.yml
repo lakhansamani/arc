@@ -30,7 +30,7 @@ jobs:
 
       before_deploy:
         - mkdir -p pkg/mod/github.com/appbaseio/
-        - mv $GOPATH/pkg/mod/github.com/appbaseio/* pkg/mod/github.com/appbaseio/
+        - sudo mv $GOPATH/pkg/mod/github.com/appbaseio/* pkg/mod/github.com/appbaseio/
         - zip -r arc-linux.zip build pkg
         - export TRAVIS_TAG="preview"
 
