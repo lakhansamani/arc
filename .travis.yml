@@ -1,0 +1,37 @@
+if: tag IS blank
+
+language: go
+
+branches:
+  only:
+    - feat/es7
+
+install: true
+
+jobs:
+  include:
+    - name: linux
+      os: linux
+      dist: xenial
+      sudo: required
+
+      before_install:
+        - git clone https://$PAT@github.com/appbaseio-confidential/arc-noss
+
+      script:
+        - make clean && make
+
+      before_deploy:
+        - mkdir -p pkg/mod/github.com/appbaseio/
+        - mv $GOPATH/pkg/mod/github.com/appbaseio/* pkg/mod/github.com/appbaseio/
+        - zip -r arc-linux.zip build pkg
+        - export TRAVIS_TAG="preview"
+
+      deploy:
+        provider: releases
+        api_key: $PAT
+        skip_cleanup: true
+        file: arc-linux.zip
+        draft: true
+        on:
+          all_branches: true
