@@ -21,10 +21,10 @@ jobs:
       sudo: required
 
       before_install:
-        - echo $GOPATH
         - git clone https://$PAT@github.com/appbaseio-confidential/arc-noss
 
       script:
+        - cd arc-noss
         - go mod download
         - make clean && make
 
