@@ -2,6 +2,8 @@ if: tag IS blank
 
 language: go
 
+go:
+  - "1.12"
 branches:
   only:
     - feat/es7
@@ -16,9 +18,11 @@ jobs:
       sudo: required
 
       before_install:
+        - echo $GOPATH
         - git clone https://$PAT@github.com/appbaseio-confidential/arc-noss
 
       script:
+        - go mod download
         - make clean && make
 
       before_deploy:
