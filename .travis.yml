@@ -1,24 +1,22 @@
 if: tag IS blank
-
 language: go
-
 go:
   - "1.14"
 branches:
   only:
     - dev
-
 install: true
-
-env:
-  - GO111MODULE=on
-
+services:
+  - docker
 jobs:
   include:
     - name: linux
       os: linux
-      dist: xenial
+      dist: trusty
       sudo: required
+      env:
+        - GO111MODULE=on
+        - CLUSTER_BILLING=true
 
       before_install:
         - git clone https://$GITHUB_TOKEN@github.com/appbaseio-confidential/arc-noss
