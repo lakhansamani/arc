@@ -21,7 +21,7 @@ jobs:
         - sudo docker pull lakhansamani/centos-golang:latest
 
       script:
-        - sudo docker run --rm=true -v `pwd`:/home/arc:rw centos-golang:latest /bin/bash -c "/home/arc/build.sh ${GITHUB_TOKEN} false true false 1 ${TRAVIS_TAG}"
+        - sudo docker run --rm=true -v `pwd`:/home/arc:rw lakhansamani/centos-golang:latest /bin/bash -c "/home/arc/build.sh ${GITHUB_TOKEN} false true false 1 ${TRAVIS_TAG}"
     - name: byoc
       os: linux
       dist: xenial
@@ -37,7 +37,7 @@ jobs:
         - sudo docker pull lakhansamani/centos-golang:latest
 
       script:
-        - sudo docker run --rm=true -v `pwd`:/home/arc:rw centos-golang:latest /bin/bash -c "/home/arc/build.sh ${GITHUB_TOKEN} false false true 1 ${TRAVIS_TAG}"
+        - sudo docker run --rm=true -v `pwd`:/home/arc:rw lakhansamani/centos-golang:latest /bin/bash -c "/home/arc/build.sh ${GITHUB_TOKEN} false false true 1 ${TRAVIS_TAG}"
     - name: self_hosted
       os: linux
       dist: xenial
@@ -53,4 +53,4 @@ jobs:
         - sudo docker pull lakhansamani/centos-golang:latest
 
       script:
-        - sudo docker run --rm=true -v `pwd`:/home/arc:rw centos-golang:latest /bin/bash -c "/home/arc/build.sh ${GITHUB_TOKEN} true false false 1 ${TRAVIS_TAG}"
+        - sudo docker run --rm=true -v `pwd`:/home/arc:rw lakhansamani/centos-golang:latest /bin/bash -c "/home/arc/build.sh ${GITHUB_TOKEN} true false false 1 ${TRAVIS_TAG}"
