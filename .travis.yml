@@ -1,45 +1,60 @@
-if: tag IS blank
-
+if: tag IS present
 language: go
-
+sudo: required
 go:
   - "1.14"
 branches:
   only:
     - dev
-
 install: true
-
-env:
-  - GO111MODULE=on
 
 jobs:
   include:
-    - name: linux
+    - name: cluster
       os: linux
       dist: xenial
       sudo: required
-
+      services:
+        - docker
       before_install:
-        - git clone https://$GITHUB_TOKEN@github.com/appbaseio-confidential/arc-noss
+        - sudo apt-get update
+        - sudo apt-get upgrade lxc-docker
+        - echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | sudo tee /etc/default/docker > /dev/null
+        - sudo service docker restart
+        - sleep 5
+        - sudo docker pull lakhansamani/centos-golang:latest
 
       script:
-        - cd arc-noss
-        - go mod download
-        - make clean && make
+        - sudo docker run --rm=true -v `pwd`:/home/arc:rw centos-golang:latest /bin/bash -c "/home/arc/build.sh ${GITHUB_TOKEN} false true false 1 ${TRAVIS_TAG}"
+    - name: byoc
+      os: linux
+      dist: xenial
+      sudo: required
+      services:
+        - docker
+      before_install:
+        - sudo apt-get update
+        - sudo apt-get upgrade lxc-docker
+        - echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | sudo tee /etc/default/docker > /dev/null
+        - sudo service docker restart
+        - sleep 5
+        - sudo docker pull lakhansamani/centos-golang:latest
 
-      before_deploy:
-        - mkdir -p go/pkg/mod/github.com/appbaseio/
-        - sudo mv $GOPATH/pkg/mod/github.com/appbaseio/* go/pkg/mod/github.com/appbaseio/
-        - zip -r arc-linux.zip build go sample
-        - export TRAVIS_TAG="preview"
+      script:
+        - sudo docker run --rm=true -v `pwd`:/home/arc:rw centos-golang:latest /bin/bash -c "/home/arc/build.sh ${GITHUB_TOKEN} false false true 1 ${TRAVIS_TAG}"
+    - name: cluster
+      os: linux
+      dist: xenial
+      sudo: required
+      services:
+        - docker
+      before_install:
+        - sudo apt-get update
+        - sudo apt-get upgrade lxc-docker
+        - echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | sudo tee /etc/default/docker > /dev/null
+        - sudo service docker restart
+        - sleep 5
+        - sudo docker pull lakhansamani/centos-golang:latest
 
-      deploy:
-        provider: releases
-        api_key: $GITHUB_TOKEN
-        skip_cleanup: true
-        file: arc-linux.zip
-        draft: true
-        overwrite: true
-        on:
-          all_branches: true
+      script:
+        - sudo docker run --rm=true -v `pwd`:/home/arc:rw centos-golang:latest /bin/bash -c "/home/arc/build.sh ${GITHUB_TOKEN} true false false 1 ${TRAVIS_TAG}"
