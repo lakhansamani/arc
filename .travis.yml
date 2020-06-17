@@ -3,11 +3,7 @@ language: go
 sudo: required
 go:
   - "1.14"
-branches:
-  only:
-    - dev
 install: true
-
 jobs:
   include:
     - name: cluster
