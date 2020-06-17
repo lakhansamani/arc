@@ -14,7 +14,7 @@ jobs:
         - docker
       before_install:
         - sudo apt-get update
-        - sudo apt-get upgrade lxc-docker
+        # - sudo apt-get upgrade lxc-docker
         - echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | sudo tee /etc/default/docker > /dev/null
         - sudo service docker restart
         - sleep 5
@@ -30,7 +30,7 @@ jobs:
         - docker
       before_install:
         - sudo apt-get update
-        - sudo apt-get upgrade lxc-docker
+        # - sudo apt-get upgrade lxc-docker
         - echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | sudo tee /etc/default/docker > /dev/null
         - sudo service docker restart
         - sleep 5
@@ -38,7 +38,7 @@ jobs:
 
       script:
         - sudo docker run --rm=true -v `pwd`:/home/arc:rw centos-golang:latest /bin/bash -c "/home/arc/build.sh ${GITHUB_TOKEN} false false true 1 ${TRAVIS_TAG}"
-    - name: cluster
+    - name: self_hosted
       os: linux
       dist: xenial
       sudo: required
@@ -46,7 +46,7 @@ jobs:
         - docker
       before_install:
         - sudo apt-get update
-        - sudo apt-get upgrade lxc-docker
+        # - sudo apt-get upgrade lxc-docker
         - echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | sudo tee /etc/default/docker > /dev/null
         - sudo service docker restart
         - sleep 5
